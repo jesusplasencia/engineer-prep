@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: prep-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prep_user
+      POSTGRES_PASSWORD: prep_password
+      POSTGRES_DB: prep_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./02-sql-storage/init-db/01-postgres-schema.sql:/docker-entrypoint-initdb.d/01-postgres-schema.sql:ro
+      - ./02-sql-storage/init-db/03-seed-data.sql:/docker-entrypoint-initdb.d/02-seed-data.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prep_user -d prep_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  oracle:
+    image: gvenzl/oracle-free:23.4-slim-faststart
+    container_name: prep-oracle
+    restart: unless-stopped
+    environment:
+      ORACLE_PASSWORD: prep_password
+      APP_USER: prep_user
+      APP_USER_PASSWORD: prep_password
+      ORACLE_DATABASE: FREEPDB1
+    ports:
+      - "1521:1521"
+    volumes:
+      - ./02-sql-storage/init-db/02-oracle-schema.sql:/container-entrypoint-initdb.d/01-oracle-schema.sql:ro
+      - oradata:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  pgdata:
+    driver: local
+  oradata:
+    driver: local
+

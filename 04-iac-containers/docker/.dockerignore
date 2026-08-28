@@ -1,0 +1,13 @@
+.git
+.gitignore
+README.md
+*.md
+.env*
+node_modules
+__pycache__
+*.pyc
+.terraform
+*.tfstate*
+Dockerfile*
+docker-compose*
+
