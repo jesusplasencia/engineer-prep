@@ -8,7 +8,7 @@ Colección de scripts de troubleshooting, automatización y procesamiento de sis
 
 | # | Script | Nivel | Propósito & Comando Clave |
 | :---: | :--- | :---: | :--- |
-| **01** | [`01-disk-cleanup-fuser.sh`](./01-disk-cleanup-fuser.sh) | 🟢 Básico | Identificar y liberar archivos eliminados retenidos por file descriptors (`lsof`, `fuser`, `/proc`). |
+| **01** | [`01-kill-zombie-process.sh`](./01-kill-zombie-process.sh) | 🟢 Básico | Identificar y terminar procesos rebeldes/zombis reteniendo logs y file descriptors (`lsof`, `fuser`, `kill`). |
 | **02** | [`02-ip-counter.sh`](./02-ip-counter.sh) | 🟢 Básico | Extracción, ordenamiento y conteo de frecuencias de IPs en web logs (`awk`, `sort`, `uniq`, `head`). |
 
 ---
@@ -24,8 +24,8 @@ chmod +x 01-linux-bash/*.sh
 Ejecuta cualquier script pasando sus parámetros correspondientes:
 
 ```bash
-# Ejemplo 01: Inspeccionar archivos abiertos y ghost file descriptors en /tmp o /var/log
-./01-linux-bash/01-disk-cleanup-fuser.sh /tmp
+# Ejemplo 01: Terminar el proceso que está escribiendo en bad.log
+./01-linux-bash/01-kill-zombie-process.sh /tmp/saint-john/bad.log
 
 # Ejemplo 02: Ejecutar el contador de IPs sobre un log de acceso
 ./01-linux-bash/02-ip-counter.sh
@@ -39,8 +39,9 @@ Escenarios interactivos para recrear localmente los desafíos de [SadServers](ht
 
 | Desafío SadServers | Script de Solución | Laboratorio / Setup | Tema & Comandos Clave |
 | :--- | :--- | :--- | :--- |
-| **"Saint John"** (*what is writing to this log file?*) | [`01-disk-cleanup-fuser.sh`](./01-disk-cleanup-fuser.sh) | Directo en el script | File Descriptors abiertos, Inodes, archivos borrados retenidos (`lsof`, `fuser`, `/proc`). |
+| **"Saint John"** (*what is writing to this log file?*) | [`01-kill-zombie-process.sh`](./01-kill-zombie-process.sh) | [`lab-saint-john-log-writer.sh`](./lab-saint-john-log-writer.sh) | File Descriptors abiertos, Inodes, terminación de procesos (`lsof`, `fuser`, `kill`, `/proc`). |
 | **"Saskatoon"** (*counting IPs in access.log*) | [`02-ip-counter.sh`](./02-ip-counter.sh) | [`lab-saskatoon-ip-counter.sh`](./lab-saskatoon-ip-counter.sh) | Procesamiento de texto en streaming, pipelines y ranking (`awk`, `sort`, `uniq`, `head`). |
+
 
 
 
