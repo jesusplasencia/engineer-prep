@@ -95,7 +95,8 @@ check_solution() {
 
     # Check if any forbidden healthcheck leaked through
     local LEAKED_NOISE
-    LEAKED_NOISE=$(grep -E 'healthz|kube-probe' "$OUTPUT_FILE" | wc -l | tr -d ' ')
+    LEAKED_NOISE=$(grep -c -E 'healthz|kube-probe' "$OUTPUT_FILE" 2>/dev/null || true)
+    LEAKED_NOISE="${LEAKED_NOISE:-0}"
 
     if [[ "$LEAKED_NOISE" -gt 0 ]]; then
         echo "❌ FAILED: Found $LEAKED_NOISE noise lines with healthcheck probes. Use 'grep -v' to exclude them."

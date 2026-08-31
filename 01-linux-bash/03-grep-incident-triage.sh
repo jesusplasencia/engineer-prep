@@ -9,4 +9,4 @@ SRC="${1:-/tmp/lab-grep/incident.log}"
 TARGET="${2:-/tmp/lab-grep/filtered_errors.log}"
 
 # Write your grep pipeline below:
-grep -Ei "ERROR|FATAL|critical" $SRC | grep -Ev "/healthz|kube-probe" > $TARGET
+grep -Ei "ERROR|FATAL|critical" "$SRC" | grep -Ev "/healthz|kube-probe" > "$TARGET"
